@@ -1,0 +1,110 @@
+.TimePicker {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  height: var(--cui-inputs-height)
+}
+
+/* Time input wrapper */
+
+.inputWrapper {
+  cursor: pointer;
+}
+
+.inputWrapper > input {
+  cursor: inherit;
+  min-width: unset;
+}
+/* Picker */
+
+.picker {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  left: 0;
+  top: calc(100% + var(--gap-between-input-wrapper-and-picker));
+  width: 100%;
+  height: 200px;
+  background: var(--cui-black-color-100);
+  transition: var(--transition-duration);
+  overflow: auto;
+  overscroll-behavior: none;
+}
+
+@media(prefers-color-scheme: dark) {
+  .picker {
+    background: var(--cui-black-color-900);
+    color: var(--cui-black-color-300)
+  }
+}
+
+.picker[class*="_isRemovedFromLayout"] {
+  display: none;
+}
+
+.picker[class*="_isRevealedFromBottom"] {
+  top: unset;
+  bottom: calc(100% + var(--gap-between-input-wrapper-and-picker));
+}
+
+.picker[class*="_isRevealedFromRight"] {
+  left: unset;
+  right: 0;
+  transform: none;
+}
+
+.TimePicker:not([class*="_isOpened"]) > .picker {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10%)
+}
+
+.TimePicker:not([class*="_isOpened"]) > .picker[class*="_isRevealedFromBottom"] {
+  transform: translateY(-10%)
+}
+
+/* Values list */
+
+.valuesList {
+  flex: 1;
+  height: 100%;
+  overflow: auto;
+  overscroll-behavior: none;
+}
+
+.valuesListValue {
+  padding: 10px 15px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.valuesListValue:not(:first-child) {
+  border-top: 1px solid var(--cui-black-color-300)
+}
+
+@media(prefers-color-scheme: dark) {
+  .valuesListValue:not(:first-child) {
+    border-top-color: var(--cui-black-color-800)
+  }
+}
+
+.valuesListValue:hover {
+  background: var(--cui-black-color-200);
+}
+
+@media(prefers-color-scheme: dark) {
+  .valuesListValue:hover {
+    background: var(--cui-black-color-800);
+  }
+}
+
+.valuesListValue[class*="_isSelected"] {
+  background: var(--cui-accent-color-700);
+  color: #fff
+}
+
+@media(prefers-color-scheme: dark) {
+  .valuesListValue[class*="_isSelected"] {
+    background: var(--cui-accent-color-900)
+  }  
+}
