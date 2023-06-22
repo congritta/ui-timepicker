@@ -1,6 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from "react";
 
-import styles from './index.module.css';
+import styles from "./index.module.css";
 
 const defaultTransitionDuration = 210;
 const defaultGapBetweenInputWrapperAndPicker = 10;
@@ -50,7 +50,7 @@ export default function TimePicker(props: {
   // Handle closing
   function handleClosing(event?: Event) {
 
-    if(event?.target && timePickerRef.current?.contains(event.target as any)) return;
+    if(event?.target && timePickerRef.current?.contains(event.target as HTMLElement)) return;
 
     setIsOpened(false);
     setTimeout(() => {window.removeEventListener('click', handleClosing);}, 0);
@@ -98,7 +98,8 @@ export default function TimePicker(props: {
       ref={timePickerRef}
       className={[
         styles.TimePicker,
-        ...(isOpened ? ['_isOpened'] : [])
+        ...(isOpened ? ["_isOpened"] : []),
+        ...(props.timePickerClassName ? [props.timePickerClassName] : [])
       ].join(' ')}
       style={{
         '--transition-duration': `${props.transitionDuration ?? defaultTransitionDuration}ms`,
@@ -108,7 +109,10 @@ export default function TimePicker(props: {
 
       {/* Input wrapper */}
       <div
-        className={styles.inputWrapper}
+        className={[
+          styles.inputWrapper,
+          ...(props.inputWrapperClassName ? [props.inputWrapperClassName] : [])
+        ].join(" ")}
         onClick={() => !isOpened ? handleOpening() : null}
       >
         <input type="text" value={`${leadingZero(time[0])}:${leadingZero(time[1])}`} readOnly />
@@ -119,20 +123,28 @@ export default function TimePicker(props: {
         ref={pickerRef}
         className={[
           styles.picker,
-          ...(floatingDirection.top ? ['_isRevealedFromBottom'] : []),
-          ...(floatingDirection.left ? ['_isRevealedFromRight'] : []),
-          ...(isPickerRemovedFromLayout ? ['_isRemovedFromLayout'] : [])
-        ].join(' ')}
+          ...(floatingDirection.top ? ["_isRevealedFromBottom"] : []),
+          ...(floatingDirection.left ? ["_isRevealedFromRight"] : []),
+          ...(isPickerRemovedFromLayout ? ["_isRemovedFromLayout"] : []),
+          ...(props.pickerClassName ? [props.pickerClassName] : [])
+        ].join(" ")}
+        style={{zIndex: !isPickerRemovedFromLayout ? 999999 : undefined}}
       >
 
-        <div className={styles.valuesList}>
+        <div
+          className={[
+            styles.valuesList,
+            ...(props.valuesListClassName ? [props.valuesListClassName] : [])
+          ].join(" ")}
+        >
           {hours.map((hour, i) => (
             <div
               key={i}
               className={[
                 styles.valuesListValue,
-                ...(time[0] === hour ? ['_isSelected'] : [])
-              ].join(' ')}
+                ...(time[0] === hour ? ["_isSelected"] : []),
+                ...(props.valuesListValueClassName ? [props.valuesListValueClassName] : [])
+              ].join(" ")}
               onClick={() => props.onUpdate([hour, time[1]])}
             >
               {leadingZero(hour)}
